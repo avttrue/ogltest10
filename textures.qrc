@@ -4,5 +4,7 @@
         <file>textures/cube2.png</file>
         <file>textures/cube3.png</file>
         <file>textures/skybox1.jpg</file>
+        <file>textures/cube1_n.png</file>
+        <file>textures/cube2_n.png</file>
     </qresource>
 </RCC>
