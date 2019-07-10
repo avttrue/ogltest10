@@ -13,5 +13,6 @@
         <file>models/cube2_n.png</file>
         <file>models/cube7_n.png</file>
         <file>models/cube7.png</file>
+        <file>models/any_n.png</file>
     </qresource>
 </RCC>
