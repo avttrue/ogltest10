@@ -85,6 +85,7 @@ void OGLWidget::initializeGL()
     m_Objects.append(new EngineObject3D);
     if(m_Objects.last()->load(":/models/sphere.obj"))
     {
+        m_Objects.last()->scale(1.5f);
         m_Objects.last()->translate(QVector3D(-2.0f, 2.0f, 2.0f));
         m_Groups.last()->add(m_Objects.last());
 
@@ -92,12 +93,14 @@ void OGLWidget::initializeGL()
     m_Objects.append(new EngineObject3D);
     if(m_Objects.last()->load(":/models/cube.obj"))
     {
+        m_Objects.last()->scale(2.0f);
         m_Objects.last()->translate(QVector3D(2.0f, -2.0f, 2.0f));
         m_Groups.last()->add(m_Objects.last());
     }
     m_Objects.append(new EngineObject3D);
     if(m_Objects.last()->load(":/models/pyramid.obj"))
     {
+        m_Objects.last()->scale(1.5f);
         m_Objects.last()->translate(QVector3D(2.0f, 2.0f, -2.0f));
         m_Groups.last()->add(m_Objects.last());
     }
