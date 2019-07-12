@@ -341,7 +341,7 @@ void OGLWidget::initCube(float width, const QString &imgpath)
 
     Material* mtl = new Material;
     mtl->setDiffuseMap(imgpath);
-    //mtl->setNormalMap(normpath);
+    //mtl->setNormalMap(":/textures/cube1_n.png");
     mtl->setShines(96.0f);
     mtl->setDiffuseColor(QVector3D(1.0f, 1.0f, 1.0f));
     mtl->setAmbienceColor(QVector3D(1.0f, 1.0f, 1.0f));
@@ -349,7 +349,7 @@ void OGLWidget::initCube(float width, const QString &imgpath)
 
     EngineObject3D* eo3d = new EngineObject3D;
     //eo3d->calculateTBN(vertexes);
-    eo3d->add(new Object3D(vertexes, indexes, mtl));
+    eo3d->add(new ElementObject3D(vertexes, indexes, mtl));
     m_Objects.append(eo3d);
 }
 

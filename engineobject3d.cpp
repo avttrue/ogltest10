@@ -24,7 +24,7 @@ bool EngineObject3D::load(const QString &filename)
     QVector<VertexData> vertexes;
     QVector<GLuint> indexes;
     QString mtlName;
-    Object3D* object = nullptr;
+    ElementObject3D* object = nullptr;
 
     qDebug() << "Reading" << filename << "...";
 
@@ -110,7 +110,7 @@ bool EngineObject3D::load(const QString &filename)
                 mtlName = strlist.at(1);
                 add(object);
 
-                object = new Object3D;
+                object = new ElementObject3D;
                 vertexes.clear();
                 indexes.clear();
             }
@@ -133,14 +133,14 @@ bool EngineObject3D::load(const QString &filename)
     return true;
 }
 
-void EngineObject3D::add(Object3D *obj)
+void EngineObject3D::add(ElementObject3D *obj)
 {
     if(! obj) return;
     for(auto o: m_Objects) if (o == obj) return;
     m_Objects.append(obj);
 }
 
-Object3D *EngineObject3D::get(int index)
+ElementObject3D *EngineObject3D::get(int index)
 {
     if(index > -1 && index < m_Objects.size()) return m_Objects.at(index);
     return nullptr;

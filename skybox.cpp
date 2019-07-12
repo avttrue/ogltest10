@@ -1,5 +1,5 @@
 #include "skybox.h"
-#include "object3d.h"
+#include "elementobject3d.h"
 #include "material.h"
 
 SkyBox::SkyBox(float width, const QImage &img)
@@ -75,7 +75,7 @@ SkyBox::SkyBox(float width, const QImage &img)
     mtl->setDiffuseColor(QVector3D(1.0f, 1.0f, 1.0f));
     mtl->setAmbienceColor(QVector3D(1.0f, 1.0f, 1.0f));
     mtl->setSpecularColor(QVector3D(1.0f, 1.0f, 1.0f));\
-    m_Box = new Object3D(vertexes, indexes, mtl);
+    m_Box = new ElementObject3D(vertexes, indexes, mtl);
 }
 
 SkyBox::~SkyBox()

@@ -1,7 +1,7 @@
 #ifndef ENGINEOBJECT3D_H
 #define ENGINEOBJECT3D_H
 
-#include "object3d.h"
+#include "elementobject3d.h"
 #include "materiallibrary.h"
 
 #include <QVector>
@@ -12,8 +12,8 @@ public:
     EngineObject3D(){}
     ~EngineObject3D();
     bool load(const QString &filename);
-    void add(Object3D* obj);
-    Object3D* get(int index);
+    void add(ElementObject3D* obj);
+    ElementObject3D* get(int index);
     void calculateTBN(QVector<VertexData> &vertdata);
 
     virtual void rotate(const QQuaternion &r);
@@ -23,7 +23,7 @@ public:
     virtual void draw(QOpenGLShaderProgram* program, QOpenGLFunctions* functions);
 
 private:
-    QVector<Object3D*> m_Objects;
+    QVector<ElementObject3D*> m_Objects;
     MaterialLibrary m_MatLibrary;
 };
 

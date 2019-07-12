@@ -12,24 +12,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 
 SOURCES += \
+        elementobject3d.cpp \
         engineobject3d.cpp \
         eye.cpp \
         groupobjects.cpp \
         main.cpp \
         material.cpp \
         materiallibrary.cpp \
-        object3d.cpp \
         oglwidget.cpp \
         skybox.cpp \
         transformational.cpp
 
 HEADERS += \
+        elementobject3d.h \
         engineobject3d.h \
         eye.h \
         groupobjects.h \
         material.h \
         materiallibrary.h \
-        object3d.h \
         oglwidget.h \
         skybox.h \
         transformational.h

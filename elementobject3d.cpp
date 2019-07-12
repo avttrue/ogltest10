@@ -1,11 +1,11 @@
-#include "object3d.h"
+#include "elementobject3d.h"
 #include "material.h"
 
 #include<QOpenGLTexture>
 #include<QOpenGLShaderProgram>
 #include<QOpenGLFunctions>
 
-Object3D::Object3D()
+ElementObject3D::ElementObject3D()
     : m_VertexBuffer(QOpenGLBuffer::VertexBuffer), // это значение по-умолчанию
       m_IndexBuffer(QOpenGLBuffer::IndexBuffer),
       m_DiffuseMap(nullptr)
@@ -13,7 +13,7 @@ Object3D::Object3D()
     m_Scale = 1.0f;
 }
 
-Object3D::Object3D(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
+ElementObject3D::ElementObject3D(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
     : m_VertexBuffer(QOpenGLBuffer::VertexBuffer), // это значение по-умолчанию
       m_IndexBuffer(QOpenGLBuffer::IndexBuffer),
       m_DiffuseMap(nullptr)
@@ -22,12 +22,12 @@ Object3D::Object3D(const QVector<VertexData> &vert, const QVector<GLuint> &ind, 
     init(vert, ind, mat);
 }
 
-Object3D::~Object3D()
+ElementObject3D::~ElementObject3D()
 {
     free();
 }
 
-void Object3D::free()
+void ElementObject3D::free()
 {
     if(m_VertexBuffer.isCreated()) m_VertexBuffer.destroy();
     if(m_IndexBuffer.isCreated()) m_IndexBuffer.destroy();
@@ -39,7 +39,7 @@ void Object3D::free()
     { delete m_NormalMap; m_NormalMap = nullptr; }
 }
 
-void Object3D::init(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
+void ElementObject3D::init(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
 {
     free();
 
@@ -72,7 +72,7 @@ void Object3D::init(const QVector<VertexData> &vert, const QVector<GLuint> &ind,
     }
 }
 
-void Object3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
+void ElementObject3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
 {
     if(!m_VertexBuffer.isCreated() || !m_IndexBuffer.isCreated()) return;
 
@@ -146,22 +146,22 @@ void Object3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
     if(m_Material->isUseNormalMap()) m_NormalMap->release();
 }
 
-void Object3D::rotate(const QQuaternion &r)
+void ElementObject3D::rotate(const QQuaternion &r)
 {
     m_Rotate *= r;
 }
 
-void Object3D::translate(const QVector3D &t)
+void ElementObject3D::translate(const QVector3D &t)
 {
     m_Translate += t;
 }
 
-void Object3D::scale(const float &s)
+void ElementObject3D::scale(const float &s)
 {
     m_Scale *= s;
 }
 
-void Object3D::setGlobalTransform(const QMatrix4x4 &gt)
+void ElementObject3D::setGlobalTransform(const QMatrix4x4 &gt)
 {
     m_GlobalTransform = gt;
 }

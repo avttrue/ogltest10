@@ -1,5 +1,5 @@
-#ifndef OBJECT3D_H
-#define OBJECT3D_H
+#ifndef ELEMENTOBJECT3D_H
+#define ELEMENTOBJECT3D_H
 
 #include "transformational.h"
 
@@ -24,12 +24,12 @@ struct VertexData
     QVector3D bitangent;
 };
 
-class Object3D : public Transformational
+class ElementObject3D : public Transformational
 {
 public:
-    Object3D();
-    Object3D(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material* mat);
-    ~Object3D();
+    ElementObject3D();
+    ElementObject3D(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material* mat);
+    ~ElementObject3D();
 
     void init(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material* mat);
     void draw(QOpenGLShaderProgram* program, QOpenGLFunctions* functions);
@@ -53,4 +53,4 @@ private:
     Material* m_Material;
 };
 
-#endif // OBJECT3D_H
+#endif // ELEMENTOBJECT3D_H

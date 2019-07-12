@@ -7,7 +7,7 @@
 #include <QVector3D>
 #include <QMatrix4x4>
 
-class Object3D;
+class ElementObject3D;
 class QImage;
 
 class SkyBox : public Transformational
@@ -22,7 +22,7 @@ public:
     void setGlobalTransform(const QMatrix4x4 &gt);
 
 private:
-    Object3D* m_Box;
+    ElementObject3D* m_Box;
 };
 
 #endif // SKYBOX_H
