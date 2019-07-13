@@ -74,7 +74,8 @@ void ElementObject3D::init(const QVector<VertexData> &vert, const QVector<GLuint
 
 void ElementObject3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
 {
-    if(!m_VertexBuffer.isCreated() || !m_IndexBuffer.isCreated()) return;
+    if(!m_VertexBuffer.isCreated()) {qCritical() << "Vertex buffer is not created"; return; }
+    if(!m_IndexBuffer.isCreated()) {qCritical() << "Index buffer is not created"; return; }
 
     if(m_Material->isUseDiffuseMap())
     {

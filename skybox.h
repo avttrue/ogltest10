@@ -7,13 +7,14 @@
 #include <QVector3D>
 #include <QMatrix4x4>
 
-class ElementObject3D;
+class EngineObject3D;
 class QImage;
 
 class SkyBox : public Transformational
 {
 public:
     SkyBox(float width, const QImage &img);
+    SkyBox(float width, const QString &str);
     ~SkyBox();
     void draw(QOpenGLShaderProgram* program, QOpenGLFunctions*functions = nullptr);
     void rotate(const QQuaternion &r);
@@ -22,7 +23,7 @@ public:
     void setGlobalTransform(const QMatrix4x4 &gt);
 
 private:
-    ElementObject3D* m_Box;
+    EngineObject3D* m_Box;
 };
 
 #endif // SKYBOX_H

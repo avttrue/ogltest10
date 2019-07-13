@@ -1,6 +1,13 @@
 #include "skybox.h"
-#include "elementobject3d.h"
+#include "engineobject3d.h"
 #include "material.h"
+
+SkyBox::SkyBox(float width, const QString &str)
+{
+    m_Box = new EngineObject3D;
+    if(m_Box->load(str))
+        m_Box->scale(width);
+}
 
 SkyBox::SkyBox(float width, const QImage &img)
 {
@@ -74,8 +81,10 @@ SkyBox::SkyBox(float width, const QImage &img)
     mtl->setShines(96.0f);
     mtl->setDiffuseColor(QVector3D(1.0f, 1.0f, 1.0f));
     mtl->setAmbienceColor(QVector3D(1.0f, 1.0f, 1.0f));
-    mtl->setSpecularColor(QVector3D(1.0f, 1.0f, 1.0f));\
-    m_Box = new ElementObject3D(vertexes, indexes, mtl);
+    mtl->setSpecularColor(QVector3D(1.0f, 1.0f, 1.0f));
+
+    m_Box = new EngineObject3D;
+    m_Box->add(new ElementObject3D(vertexes, indexes, mtl));
 }
 
 SkyBox::~SkyBox()
