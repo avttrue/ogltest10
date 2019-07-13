@@ -8,7 +8,8 @@
 ElementObject3D::ElementObject3D()
     : m_VertexBuffer(QOpenGLBuffer::VertexBuffer), // это значение по-умолчанию
       m_IndexBuffer(QOpenGLBuffer::IndexBuffer),
-      m_DiffuseMap(nullptr)
+      m_DiffuseMap(nullptr),
+      m_NormalMap(nullptr)
 {
     m_Scale = 1.0f;
 }
@@ -16,7 +17,8 @@ ElementObject3D::ElementObject3D()
 ElementObject3D::ElementObject3D(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
     : m_VertexBuffer(QOpenGLBuffer::VertexBuffer), // это значение по-умолчанию
       m_IndexBuffer(QOpenGLBuffer::IndexBuffer),
-      m_DiffuseMap(nullptr)
+      m_DiffuseMap(nullptr),
+      m_NormalMap(nullptr)
 {
     m_Scale = 1.0f;
     init(vert, ind, mat);

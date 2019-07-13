@@ -44,8 +44,8 @@ protected:
 private:
     QOpenGLBuffer m_VertexBuffer;
     QOpenGLBuffer m_IndexBuffer;
-    QOpenGLTexture* m_DiffuseMap = nullptr;
-    QOpenGLTexture* m_NormalMap = nullptr;
+    QOpenGLTexture* m_DiffuseMap;
+    QOpenGLTexture* m_NormalMap;
     QQuaternion m_Rotate;
     QVector3D m_Translate;
     float m_Scale;
