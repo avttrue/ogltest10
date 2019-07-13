@@ -14,7 +14,7 @@ class SkyBox : public Transformational
 {
 public:
     SkyBox(float width, const QImage &img);
-    SkyBox(float width, const QString &str);
+    SkyBox(float width, const QString &path);
     ~SkyBox();
     void draw(QOpenGLShaderProgram* program, QOpenGLFunctions*functions = nullptr);
     void rotate(const QQuaternion &r);

@@ -82,6 +82,7 @@ void OGLWidget::initializeGL()
     m_Groups.last()->translate(QVector3D(0.0f, 0.0f, -8.0f));
 
     m_Groups.append(new GroupObjects("sphere-cube-pyramid"));
+
     m_Objects.append(new EngineObject3D);
     if(m_Objects.last()->load(":/models/sphere.obj"))
     {
@@ -90,6 +91,7 @@ void OGLWidget::initializeGL()
         m_Groups.last()->add(m_Objects.last());
 
     }
+
     m_Objects.append(new EngineObject3D);
     if(m_Objects.last()->load(":/models/cube.obj"))
     {
@@ -97,6 +99,7 @@ void OGLWidget::initializeGL()
         m_Objects.last()->translate(QVector3D(2.0f, -2.0f, 2.0f));
         m_Groups.last()->add(m_Objects.last());
     }
+
     m_Objects.append(new EngineObject3D);
     if(m_Objects.last()->load(":/models/pyramid.obj"))
     {
@@ -104,7 +107,10 @@ void OGLWidget::initializeGL()
         m_Objects.last()->translate(QVector3D(2.0f, 2.0f, -2.0f));
         m_Groups.last()->add(m_Objects.last());
     }
+
     m_Groups.last()->translate(QVector3D(10.0f, -10.0f, -10.0f));
+
+    //
 
     m_Groups.append(new GroupObjects("All sphere-cube-pyramid + cubes"));
     for(int i = 0; i < m_Groups.size() -1; i++)

@@ -4,12 +4,12 @@
 
 EngineObject3D::~EngineObject3D()
 {
-    for(auto o: m_Objects) delete o;
+    for(auto o: m_Elements) delete o;
 }
 
 bool EngineObject3D::load(const QString &filename)
 {
-    if(m_Objects.size()) {qCritical() << "EngineObject not empty!"; return false; }
+    if(m_Elements.size()) {qCritical() << "EngineObject not empty!"; return false; }
 
     QFile objfile(filename);
 
@@ -122,7 +122,6 @@ bool EngineObject3D::load(const QString &filename)
 
     if(!ok) return false;
 
-    qDebug() << "Object is loaded successfully";
     if(object)
     {
         calculateTBN(vertexes);
@@ -130,19 +129,20 @@ bool EngineObject3D::load(const QString &filename)
     }
     add(object);
 
+    qDebug() << "Object is loaded successfully:" << m_Elements.size() << "elements";
     return true;
 }
 
 void EngineObject3D::add(ElementObject3D *obj)
 {
     if(! obj) return;
-    for(auto o: m_Objects) if (o == obj) return;
-    m_Objects.append(obj);
+    for(auto o: m_Elements) if (o == obj) return;
+    m_Elements.append(obj);
 }
 
 ElementObject3D *EngineObject3D::get(int index)
 {
-    if(index > -1 && index < m_Objects.size()) return m_Objects.at(index);
+    if(index > -1 && index < m_Elements.size()) return m_Elements.at(index);
     return nullptr;
 }
 
@@ -180,25 +180,25 @@ void EngineObject3D::calculateTBN(QVector<VertexData> &vertdata)
 
 void EngineObject3D::rotate(const QQuaternion &r)
 {
-    for(auto o: m_Objects) o->rotate(r);
+    for(auto o: m_Elements) o->rotate(r);
 }
 
 void EngineObject3D::translate(const QVector3D &t)
 {
-    for(auto o: m_Objects) o->translate(t);
+    for(auto o: m_Elements) o->translate(t);
 }
 
 void EngineObject3D::scale(const float &s)
 {
-    for(auto o: m_Objects) o->scale(s);
+    for(auto o: m_Elements) o->scale(s);
 }
 
 void EngineObject3D::setGlobalTransform(const QMatrix4x4 &gt)
 {
-    for(auto o: m_Objects) o->setGlobalTransform(gt);
+    for(auto o: m_Elements) o->setGlobalTransform(gt);
 }
 
 void EngineObject3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
 {
-    for(auto o: m_Objects) o->draw(program, functions);
+    for(auto o: m_Elements) o->draw(program, functions);
 }

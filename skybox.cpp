@@ -2,11 +2,11 @@
 #include "engineobject3d.h"
 #include "material.h"
 
-SkyBox::SkyBox(float width, const QString &str)
+SkyBox::SkyBox(float width, const QString &path)
 {
     m_Box = new EngineObject3D;
-    if(m_Box->load(str))
-        m_Box->scale(width);
+    if(m_Box->load(path)) m_Box->scale(width);
+    else qCritical() << "Skybox not loaded";
 }
 
 SkyBox::SkyBox(float width, const QImage &img)

@@ -23,7 +23,7 @@ public:
     virtual void draw(QOpenGLShaderProgram* program, QOpenGLFunctions* functions);
 
 private:
-    QVector<ElementObject3D*> m_Objects;
+    QVector<ElementObject3D*> m_Elements;
     MaterialLibrary m_MatLibrary;
 };
 
