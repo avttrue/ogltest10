@@ -190,19 +190,30 @@ void OGLWidget::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key())
     {
+    case Qt::Key_Q:
+    {
+        close();
+        break;
+    }
     case Qt::Key_Tab:
+    {
         currentGroup >= m_Groups.size() - 1 ? currentGroup = 0 : currentGroup++;
         for(auto g: m_Groups) g->del(m_Eye);
         m_Groups.at(currentGroup)->add(m_Eye);
         break;
+    }
     case Qt::Key_Delete:
+    {
         for(auto g: m_Groups) g->del(m_Eye);
         break;
+    }
     case Qt::Key_Escape:
+    {
         for(auto g: m_Groups) g->del(m_Eye);
         QMatrix4x4 m; m.setToIdentity();
         m_Eye->setGlobalTransform(m);
         break;
+    }
     }
 }
 
@@ -268,17 +279,13 @@ void OGLWidget::initShaders()
         close();
     if(! m_Program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragshader.fsh"))
         close();
-
-    if(! m_Program.link())
-        close();
+    if(! m_Program.link()) close();
 
     if(! m_ProgramSkyBox.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/skybox.vsh"))
         close();
     if(! m_ProgramSkyBox.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/skybox.fsh"))
         close();
-
-    if(! m_ProgramSkyBox.link())
-        close();
+    if(! m_ProgramSkyBox.link()) close();
 }
 
 void OGLWidget::initCube(float width, const QString &imgpath)
