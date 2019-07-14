@@ -1,5 +1,7 @@
 #include "material.h"
 
+#include <QFile>
+#include <QDebug>
 
 Material::Material()
 {
@@ -64,6 +66,8 @@ QImage Material::DiffuseMap() const
 
 void Material::setDiffuseMap(const QString &filename)
 {
+    if(!QFile(filename).exists()) {qDebug() << "File not found:" << filename; return; }
+
     m_DiffuseMap = QImage(filename);
     m_IsUseDiffuseMap = true;
 }
@@ -86,6 +90,8 @@ QImage Material::NormalMap() const
 
 void Material::setNormalMap(const QString &filename)
 {
+    if(!QFile(filename).exists()) {qDebug() << "File not found:" << filename; return; }
+
     m_NormalMap = QImage(filename);
     m_IsUseNormalMap = true;
 }

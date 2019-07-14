@@ -1,4 +1,3 @@
-
 uniform sampler2D u_DiffuseMap;
 varying highp vec2 v_textcoord;
 
