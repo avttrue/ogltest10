@@ -147,7 +147,7 @@ ElementObject3D *EngineObject3D::get(int index)
 }
 
 void EngineObject3D::calculateTBN(QVector<VertexData> &vertdata)
-{
+{        
     for(int i = 0; i < vertdata.size(); i += 3)
     {
         auto v1 = vertdata.at(i).position;
