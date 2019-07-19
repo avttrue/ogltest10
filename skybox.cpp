@@ -2,13 +2,6 @@
 #include "engineobject3d.h"
 #include "material.h"
 
-SkyBox::SkyBox(float width, const QString &path)
-{
-    m_Box = new EngineObject3D;
-    if(m_Box->load(path)) m_Box->scale(width);
-    else qCritical() << "Skybox not loaded";
-}
-
 SkyBox::SkyBox(float width,
                const QImage &img_forward,
                const QImage &img_top,

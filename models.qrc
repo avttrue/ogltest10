@@ -14,13 +14,5 @@
         <file>models/cube7_n.png</file>
         <file>models/cube7.png</file>
         <file>models/any_n.png</file>
-        <file>models/sky/sky_back.png</file>
-        <file>models/sky/sky_bottom.png</file>
-        <file>models/sky/sky_forward.png</file>
-        <file>models/sky/sky_top.png</file>
-        <file>models/sky/sky.mtl</file>
-        <file>models/sky/sky.obj</file>
-        <file>models/sky/sky_left.png</file>
-        <file>models/sky/sky_right.png</file>
     </qresource>
 </RCC>

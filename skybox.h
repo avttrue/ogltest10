@@ -21,7 +21,6 @@ public:
            const QImage &img_left,
            const QImage &img_right,
            const QImage &img_back);
-    SkyBox(float width, const QString &path);
     void fillFace(QVector<VertexData> vertexes, const QImage &img);
     ~SkyBox();
     void draw(QOpenGLShaderProgram* program, QOpenGLFunctions*functions = nullptr);

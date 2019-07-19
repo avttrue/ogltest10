@@ -94,7 +94,7 @@ void OGLWidget::initializeGL()
 
     m_Objects.append(new EngineObject3D);
     if(m_Objects.last()->load(":/models/cube.obj"))
-    //if(m_Objects.last()->load(":/models/sky/sky.obj"))
+        //if(m_Objects.last()->load(":/models/sky/sky.obj"))
     {
         m_Objects.last()->scale(2.0f);
         m_Objects.last()->translate(QVector3D(2.0f, -2.0f, 2.0f));
@@ -126,8 +126,6 @@ void OGLWidget::initializeGL()
                           QImage(":/textures/sky/sky_left.png"),
                           QImage(":/textures/sky/sky_right.png"),
                           QImage(":/textures/sky/sky_back.png"));
-
-    //m_SkyBox = new SkyBox(1000.0f, ":/models/sky/sky.obj");
 
     m_Timer.start(30, this);
 }
