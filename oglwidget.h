@@ -8,9 +8,9 @@
 #include <QOpenGLBuffer>
 #include <QBasicTimer>
 
-class EngineObject3D;
+class Object3D;
 class Transformational;
-class GroupObjects;
+class Object3DGroup;
 class Eye;
 class SkyBox;
 
@@ -36,14 +36,14 @@ protected:
     void initCube(float width, const QString &imgpath);
 
 private:
-    QMatrix4x4 m_PojectionMatrix;
-    QOpenGLShaderProgram m_Program;
+    QMatrix4x4 m_ProjectionMatrix;
+    QOpenGLShaderProgram m_ProgramObject;
     QOpenGLShaderProgram m_ProgramSkyBox;
     QVector2D m_MousePosition;
     QQuaternion m_Rotation;
-    QVector<EngineObject3D*> m_Objects;
-    QVector<GroupObjects*> m_Groups;
-    GroupObjects* m_GlobalGroup;
+    QVector<Object3D*> m_Objects;
+    QVector<Object3DGroup*> m_Groups;
+    Object3DGroup* m_GlobalGroup;
     Eye* m_Eye;
     SkyBox* m_SkyBox;
     QBasicTimer m_Timer;
@@ -54,7 +54,7 @@ private:
     double m_AngleGrop3;
     double m_AngleGrop4;
     double m_AngleGropMain;
-    int currentGroup = 0;
+    int currentGroup;
 };
 
 #endif // OGLWIDGET_H

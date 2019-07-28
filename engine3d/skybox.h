@@ -7,7 +7,7 @@
 #include <QVector3D>
 #include <QMatrix4x4>
 
-class EngineObject3D;
+class Object3D;
 class VertexData;
 class QImage;
 
@@ -30,7 +30,7 @@ public:
     void setGlobalTransform(const QMatrix4x4 &gt);
 
 private:
-    EngineObject3D* m_Box;
+    Object3D* m_Box;
 };
 
 #endif // SKYBOX_H

@@ -1,11 +1,11 @@
-#include "elementobject3d.h"
+#include "object3delement.h"
 #include "material.h"
 
 #include<QOpenGLTexture>
 #include<QOpenGLShaderProgram>
 #include<QOpenGLFunctions>
 
-ElementObject3D::ElementObject3D()
+Object3DElement::Object3DElement()
     : m_VertexBuffer(QOpenGLBuffer::VertexBuffer), // это значение по-умолчанию
       m_IndexBuffer(QOpenGLBuffer::IndexBuffer),
       m_DiffuseMap(nullptr),
@@ -14,7 +14,7 @@ ElementObject3D::ElementObject3D()
     m_Scale = 1.0f;
 }
 
-ElementObject3D::ElementObject3D(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
+Object3DElement::Object3DElement(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
     : m_VertexBuffer(QOpenGLBuffer::VertexBuffer), // это значение по-умолчанию
       m_IndexBuffer(QOpenGLBuffer::IndexBuffer),
       m_DiffuseMap(nullptr),
@@ -24,12 +24,12 @@ ElementObject3D::ElementObject3D(const QVector<VertexData> &vert, const QVector<
     init(vert, ind, mat);
 }
 
-ElementObject3D::~ElementObject3D()
+Object3DElement::~Object3DElement()
 {
     free();
 }
 
-void ElementObject3D::free()
+void Object3DElement::free()
 {
     if(m_VertexBuffer.isCreated()) m_VertexBuffer.destroy();
     if(m_IndexBuffer.isCreated()) m_IndexBuffer.destroy();
@@ -41,7 +41,7 @@ void ElementObject3D::free()
     { delete m_NormalMap; m_NormalMap = nullptr; }
 }
 
-void ElementObject3D::init(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
+void Object3DElement::init(const QVector<VertexData> &vert, const QVector<GLuint> &ind, Material *mat)
 {
     free();
 
@@ -74,7 +74,7 @@ void ElementObject3D::init(const QVector<VertexData> &vert, const QVector<GLuint
     }
 }
 
-void ElementObject3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
+void Object3DElement::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
 {
     if(!m_VertexBuffer.isCreated()) {qCritical() << "Vertex buffer is not created"; return; }
     if(!m_IndexBuffer.isCreated()) {qCritical() << "Index buffer is not created"; return; }
@@ -153,22 +153,22 @@ void ElementObject3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *func
     if(m_Material->isUseNormalMap()) m_NormalMap->release();
 }
 
-void ElementObject3D::rotate(const QQuaternion &r)
+void Object3DElement::rotate(const QQuaternion &r)
 {
     m_Rotate *= r;
 }
 
-void ElementObject3D::translate(const QVector3D &t)
+void Object3DElement::translate(const QVector3D &t)
 {
     m_Translate += t;
 }
 
-void ElementObject3D::scale(const float &s)
+void Object3DElement::scale(const float &s)
 {
     m_Scale *= s;
 }
 
-void ElementObject3D::setGlobalTransform(const QMatrix4x4 &gt)
+void Object3DElement::setGlobalTransform(const QMatrix4x4 &gt)
 {
     m_GlobalTransform = gt;
 }

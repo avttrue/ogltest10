@@ -1,10 +1,11 @@
 #include "oglwidget.h"
-#include "engineobject3d.h"
-#include "groupobjects.h"
-#include "eye.h"
-#include "skybox.h"
-#include "material.h"
+#include "engine3d/object3d.h"
+#include "engine3d/object3dgroup.h"
+#include "engine3d/eye.h"
+#include "engine3d/skybox.h"
+#include "engine3d/material.h"
 
+#include <QOpenGLFunctions>
 #include <QMouseEvent>
 #include <QOpenGLContext>
 #include <QtMath>
@@ -12,9 +13,11 @@
 OGLWidget::OGLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
-    m_GlobalGroup = new GroupObjects("Global");
+    m_GlobalGroup = new Object3DGroup("Global");
     m_Eye = new Eye;
     m_Eye->translate(QVector3D(0.0f, 0.0f, -5.0f));
+
+    currentGroup = 0;
 }
 
 OGLWidget::~OGLWidget()
@@ -29,29 +32,14 @@ OGLWidget::~OGLWidget()
 
 void OGLWidget::initializeGL()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    context()->functions()->glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    context()->functions()->glEnable(GL_DEPTH_TEST);
+    context()->functions()->glEnable(GL_CULL_FACE);
 
     initShaders();
 
     float step = 2.0f;
-    m_Groups.append(new GroupObjects("cube3"));
-    for(float x = -step; x <= step; x += step)
-    {
-        for(float y = -step; y <= step; y += step)
-        {
-            for(float z = -step; z <= step; z += step)
-            {
-                initCube(1.0f, ":/textures/cube3.png");
-                m_Objects.last()->translate(QVector3D(x, y, z));
-                m_Groups.last()->add(m_Objects.last());
-            }
-        }
-    }
-    m_Groups.last()->translate(QVector3D(-4.0f, 0.0f, 0.0f));
-
-    m_Groups.append(new GroupObjects("cube1"));
+    m_Groups.append(new Object3DGroup("cube1"));
     for(float x = -step; x <= step; x += step)
     {
         for(float y = -step; y <= step; y += step)
@@ -64,9 +52,9 @@ void OGLWidget::initializeGL()
             }
         }
     }
-    m_Groups.last()->translate(QVector3D(4.0f, 0.0f, 0.0f));
+    m_Groups.last()->translate(QVector3D(-4.0f, 0.0f, 0.0f));
 
-    m_Groups.append(new GroupObjects("cube2"));
+    m_Groups.append(new Object3DGroup("cube2"));
     for(float x = -step; x <= step; x += step)
     {
         for(float y = -step; y <= step; y += step)
@@ -79,11 +67,26 @@ void OGLWidget::initializeGL()
             }
         }
     }
+    m_Groups.last()->translate(QVector3D(4.0f, 0.0f, 0.0f));
+
+    m_Groups.append(new Object3DGroup("cube3"));
+    for(float x = -step; x <= step; x += step)
+    {
+        for(float y = -step; y <= step; y += step)
+        {
+            for(float z = -step; z <= step; z += step)
+            {
+                initCube(1.0f, ":/textures/cube3.png");
+                m_Objects.last()->translate(QVector3D(x, y, z));
+                m_Groups.last()->add(m_Objects.last());
+            }
+        }
+    }
     m_Groups.last()->translate(QVector3D(0.0f, 0.0f, -8.0f));
 
-    m_Groups.append(new GroupObjects("sphere-cube-pyramid"));
+    m_Groups.append(new Object3DGroup("sphere-cube-pyramid"));
 
-    m_Objects.append(new EngineObject3D);
+    m_Objects.append(new Object3D);
     if(m_Objects.last()->load(":/models/sphere.obj"))
     {
         m_Objects.last()->scale(1.5f);
@@ -92,16 +95,15 @@ void OGLWidget::initializeGL()
 
     }
 
-    m_Objects.append(new EngineObject3D);
+    m_Objects.append(new Object3D);
     if(m_Objects.last()->load(":/models/cube.obj"))
-        //if(m_Objects.last()->load(":/models/sky/sky.obj"))
     {
         m_Objects.last()->scale(2.0f);
         m_Objects.last()->translate(QVector3D(2.0f, -2.0f, 2.0f));
         m_Groups.last()->add(m_Objects.last());
     }
 
-    m_Objects.append(new EngineObject3D);
+    m_Objects.append(new Object3D);
     if(m_Objects.last()->load(":/models/pyramid.obj"))
     {
         m_Objects.last()->scale(1.5f);
@@ -113,7 +115,7 @@ void OGLWidget::initializeGL()
 
     //
 
-    m_Groups.append(new GroupObjects("All sphere-cube-pyramid + cubes"));
+    m_Groups.append(new Object3DGroup("All sphere-cube-pyramid + cubes"));
     for(int i = 0; i < m_Groups.size() -1; i++)
         m_Groups.last()->add(m_Groups.at(i));
 
@@ -133,27 +135,27 @@ void OGLWidget::initializeGL()
 void OGLWidget::resizeGL(int w, int h)
 {
     float aspect = w / (h? static_cast<float>(h) : 1);
-    m_PojectionMatrix.setToIdentity();
-    m_PojectionMatrix.perspective(45, aspect, 0.01f, 1000.0f); // посл. 2 параметра - настройка плоскостей отсечения
+    m_ProjectionMatrix.setToIdentity();
+    m_ProjectionMatrix.perspective(45, aspect, 0.01f, 1000.0f); // посл. 2 параметра - настройка плоскостей отсечения
 }
 
 void OGLWidget::paintGL()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    context()->functions()->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_ProgramSkyBox.bind();
-    m_ProgramSkyBox.setUniformValue("u_ProjectionMatrix", m_PojectionMatrix);
+    m_ProgramSkyBox.setUniformValue("u_ProjectionMatrix", m_ProjectionMatrix);
     m_Eye->draw(&m_ProgramSkyBox);
     m_SkyBox->draw(&m_ProgramSkyBox, context()->functions());
     m_ProgramSkyBox.release();
 
-    m_Program.bind();
-    m_Program.setUniformValue("u_ProjectionMatrix", m_PojectionMatrix);
-    m_Program.setUniformValue("u_LightPosition", QVector4D(0.0f, 0.0f, 0.0f, 1.0f));
-    m_Program.setUniformValue("u_LightPower", 1.0f);
-    m_Eye->draw(&m_Program);
-    m_GlobalGroup->draw(&m_Program, context()->functions());
-    m_Program.release();
+    m_ProgramObject.bind();
+    m_ProgramObject.setUniformValue("u_ProjectionMatrix", m_ProjectionMatrix);
+    m_ProgramObject.setUniformValue("u_LightPosition", QVector4D(0.0f, 0.0f, 0.0f, 1.0f));
+    m_ProgramObject.setUniformValue("u_LightPower", 1.0f);
+    m_Eye->draw(&m_ProgramObject);
+    m_GlobalGroup->draw(&m_ProgramObject, context()->functions());
+    m_ProgramObject.release();
 }
 
 void OGLWidget::mousePressEvent(QMouseEvent *event)
@@ -168,25 +170,30 @@ void OGLWidget::mousePressEvent(QMouseEvent *event)
 
 void OGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if(event->buttons() == Qt::LeftButton)
+    switch (event->buttons())
     {
-        QVector2D diffpos = QVector2D(event->localPos()) - m_MousePosition;
-        m_MousePosition = QVector2D(event->localPos());
+        case Qt::LeftButton:
+        {
+            QVector2D diffpos = QVector2D(event->localPos()) - m_MousePosition;
+            m_MousePosition = QVector2D(event->localPos());
 
-        float angle = diffpos.length() / 2.0f;
-        QVector3D axis = QVector3D(diffpos.y(), diffpos.x(), 0.0f);
-        m_Eye->rotate(QQuaternion::fromAxisAndAngle(axis, angle));
+            float angle = diffpos.length() / 2.0f;
+            QVector3D axis = QVector3D(diffpos.y(), diffpos.x(), 0.0f);
+            m_Eye->rotate(QQuaternion::fromAxisAndAngle(axis, angle));
 
-        update();
+            update();
+        }
+
     }
-
     event->accept();
 }
 
 void OGLWidget::wheelEvent(QWheelEvent *event)
 {
-    if(event->delta() > 0) m_Eye->translate(QVector3D(0.0f, 0.0f, 0.25f));
-    else if(event->delta() < 0) m_Eye->translate(QVector3D(0.0f, 0.0f, -0.25f));
+    float mod = event->modifiers() & Qt::ControlModifier ? 3.0f : 1.0f;
+
+    if(event->delta() > 0) m_Eye->translate(QVector3D(0.0f, 0.0f, 0.25f * mod));
+    else if(event->delta() < 0) m_Eye->translate(QVector3D(0.0f, 0.0f, -0.25f * mod));
 
     update();
 }
@@ -195,30 +202,32 @@ void OGLWidget::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key())
     {
-    case Qt::Key_Q:
-    {
-        close();
-        break;
-    }
-    case Qt::Key_Tab:
-    {
-        currentGroup >= m_Groups.size() - 1 ? currentGroup = 0 : currentGroup++;
-        for(auto g: m_Groups) g->del(m_Eye);
-        m_Groups.at(currentGroup)->add(m_Eye);
-        break;
-    }
-    case Qt::Key_Delete:
-    {
-        for(auto g: m_Groups) g->del(m_Eye);
-        break;
-    }
-    case Qt::Key_Escape:
-    {
-        for(auto g: m_Groups) g->del(m_Eye);
-        QMatrix4x4 m; m.setToIdentity();
-        m_Eye->setGlobalTransform(m);
-        break;
-    }
+        case Qt::Key_Q:
+        {
+            close();
+            break;
+        }
+        case Qt::Key_Tab:
+        {
+            currentGroup >= m_Groups.size() - 1 ? currentGroup = 0 : currentGroup++;
+            for(auto g: m_Groups) g->del(m_Eye);
+            m_Groups.at(currentGroup)->add(m_Eye);
+            qDebug() << "Current group:" << m_Groups.at(currentGroup)->Name();
+            break;
+        }
+        case Qt::Key_Delete:
+        {
+            for(auto g: m_Groups) g->del(m_Eye);
+            break;
+        }
+        case Qt::Key_Escape:
+        {
+            for(auto g: m_Groups) g->del(m_Eye);
+            QMatrix4x4 m; m.setToIdentity();
+            m_Eye->setGlobalTransform(m);
+            qDebug() << "Current group: None";
+            break;
+        }
     }
 }
 
@@ -280,11 +289,11 @@ void OGLWidget::timerEvent(QTimerEvent *event)
 
 void OGLWidget::initShaders()
 {
-    if(! m_Program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertshader.vsh"))
+    if(! m_ProgramObject.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/object.vsh"))
         close();
-    if(! m_Program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragshader.fsh"))
+    if(! m_ProgramObject.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/object.fsh"))
         close();
-    if(! m_Program.link()) close();
+    if(! m_ProgramObject.link()) close();
 
     if(! m_ProgramSkyBox.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/skybox.vsh"))
         close();
@@ -298,59 +307,35 @@ void OGLWidget::initCube(float width, const QString &imgpath)
     float width_div_2 = width / 2.0f;
 
     QVector<VertexData> vertexes;
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(0.0f, 0.0f, -1.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(0.0f, 0.0f, -1.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(0.0f, 0.0f, -1.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(0.0f, 0.0f, -1.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2), QVector2D(1.0f, 1.0f), QVector3D(0.0f, 0.0f, -1.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2), QVector2D(1.0f, 0.0f), QVector3D(0.0f, 0.0f, -1.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2), QVector2D(0.0f, 1.0f), QVector3D(0.0f, 0.0f, -1.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2), QVector2D(0.0f, 0.0f), QVector3D(0.0f, 0.0f, -1.0f)));
 
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2), QVector2D(1.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2), QVector2D(1.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2), QVector2D(0.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2), QVector2D(0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
 
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(0.0f, -1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(0.0f, -1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(0.0f, -1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(0.0f, -1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2), QVector2D(1.0f, 1.0f), QVector3D(0.0f, -1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2), QVector2D(1.0f, 0.0f), QVector3D(0.0f, -1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2), QVector2D(0.0f, 1.0f), QVector3D(0.0f, -1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2), QVector2D(0.0f, 0.0f), QVector3D(0.0f, -1.0f, 0.0f)));
 
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2), QVector2D(0.0f, 1.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2), QVector2D(1.0f, 1.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2), QVector2D(0.0f, 0.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2), QVector2D(1.0f, 0.0f), QVector3D(-1.0f, 0.0f, 0.0f)));
 
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2), QVector2D(1.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2), QVector2D(1.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2), QVector2D(0.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2), QVector2D(0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
 
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2), QVector2D(1.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2), QVector2D(1.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2), QVector2D(0.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2), QVector2D(0.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
 
     QVector<GLuint> indexes;
     for(GLuint i = 0; i < 24; i += 4)
@@ -367,9 +352,9 @@ void OGLWidget::initCube(float width, const QString &imgpath)
     mtl->setAmbienceColor(QVector3D(1.0f, 1.0f, 1.0f));
     mtl->setSpecularColor(QVector3D(1.0f, 1.0f, 1.0f));
 
-    EngineObject3D* eo3d = new EngineObject3D;
+    Object3D* eo3d = new Object3D;
     //eo3d->calculateTBN(vertexes);
-    eo3d->add(new ElementObject3D(vertexes, indexes, mtl));
+    eo3d->add(new Object3DElement(vertexes, indexes, mtl));
     m_Objects.append(eo3d);
 }
 

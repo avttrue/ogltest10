@@ -12,27 +12,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 
 SOURCES += \
-        elementobject3d.cpp \
-        engineobject3d.cpp \
-        eye.cpp \
-        groupobjects.cpp \
+        engine3d/eye.cpp \
+        engine3d/material.cpp \
+        engine3d/materiallibrary.cpp \
+        engine3d/object3d.cpp \
+        engine3d/object3delement.cpp \
+        engine3d/object3dgroup.cpp \
+        engine3d/skybox.cpp \
+        engine3d/transformational.cpp \
         main.cpp \
-        material.cpp \
-        materiallibrary.cpp \
-        oglwidget.cpp \
-        skybox.cpp \
-        transformational.cpp
+        oglwidget.cpp
 
 HEADERS += \
-        elementobject3d.h \
-        engineobject3d.h \
-        eye.h \
-        groupobjects.h \
-        material.h \
-        materiallibrary.h \
-        oglwidget.h \
-        skybox.h \
-        transformational.h
+        engine3d/eye.h \
+        engine3d/material.h \
+        engine3d/materiallibrary.h \
+        engine3d/object3d.h \
+        engine3d/object3delement.h \
+        engine3d/object3dgroup.h \
+        engine3d/skybox.h \
+        engine3d/transformational.h \
+        oglwidget.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

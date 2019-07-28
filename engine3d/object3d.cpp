@@ -1,13 +1,13 @@
-#include "engineobject3d.h"
+#include "object3d.h"
 
 #include <QDir>
 
-EngineObject3D::~EngineObject3D()
+Object3D::~Object3D()
 {
     for(auto o: m_Elements) delete o;
 }
 
-bool EngineObject3D::load(const QString &filename)
+bool Object3D::load(const QString &filename)
 {
     if(m_Elements.size()) {qCritical() << "EngineObject not empty!"; return false; }
 
@@ -24,7 +24,7 @@ bool EngineObject3D::load(const QString &filename)
     QVector<VertexData> vertexes;
     QVector<GLuint> indexes;
     QString mtlName;
-    ElementObject3D* object = nullptr;
+    Object3DElement* object = nullptr;
 
     qDebug() << "Reading" << filename << "...";
 
@@ -110,7 +110,7 @@ bool EngineObject3D::load(const QString &filename)
                 mtlName = strlist.at(1);
                 add(object);
 
-                object = new ElementObject3D;
+                object = new Object3DElement;
                 vertexes.clear();
                 indexes.clear();
             }
@@ -133,20 +133,20 @@ bool EngineObject3D::load(const QString &filename)
     return true;
 }
 
-void EngineObject3D::add(ElementObject3D *obj)
+void Object3D::add(Object3DElement *obj)
 {
     if(! obj) return;
     for(auto o: m_Elements) if (o == obj) return;
     m_Elements.append(obj);
 }
 
-ElementObject3D *EngineObject3D::get(int index)
+Object3DElement *Object3D::get(int index)
 {
     if(index > -1 && index < m_Elements.size()) return m_Elements.at(index);
     return nullptr;
 }
 
-void EngineObject3D::calculateTBN(QVector<VertexData> &vertdata)
+void Object3D::calculateTBN(QVector<VertexData> &vertdata)
 {        
     for(int i = 0; i < vertdata.size(); i += 3)
     {
@@ -178,27 +178,27 @@ void EngineObject3D::calculateTBN(QVector<VertexData> &vertdata)
     }
 }
 
-void EngineObject3D::rotate(const QQuaternion &r)
+void Object3D::rotate(const QQuaternion &r)
 {
     for(auto o: m_Elements) o->rotate(r);
 }
 
-void EngineObject3D::translate(const QVector3D &t)
+void Object3D::translate(const QVector3D &t)
 {
     for(auto o: m_Elements) o->translate(t);
 }
 
-void EngineObject3D::scale(const float &s)
+void Object3D::scale(const float &s)
 {
     for(auto o: m_Elements) o->scale(s);
 }
 
-void EngineObject3D::setGlobalTransform(const QMatrix4x4 &gt)
+void Object3D::setGlobalTransform(const QMatrix4x4 &gt)
 {
     for(auto o: m_Elements) o->setGlobalTransform(gt);
 }
 
-void EngineObject3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
+void Object3D::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
 {
     for(auto o: m_Elements) o->draw(program, functions);
 }

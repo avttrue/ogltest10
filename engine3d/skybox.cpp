@@ -1,6 +1,6 @@
 #include "skybox.h"
-#include "engineobject3d.h"
-#include "material.h"
+#include "object3d.h"
+#include "engine3d/material.h"
 
 SkyBox::SkyBox(float width,
                const QImage &img_forward,
@@ -11,7 +11,7 @@ SkyBox::SkyBox(float width,
                const QImage &img_back)
 {
     float width_div_2 = width / 2.0f;
-    m_Box = new EngineObject3D;
+    m_Box = new Object3D;
 
     QVector<VertexData> vertexes;
     vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2),
@@ -96,7 +96,7 @@ void SkyBox::fillFace(QVector<VertexData> vertexes, const QImage &img)
     mtl->setAmbienceColor(QVector3D(1.0f, 1.0f, 1.0f));
     mtl->setSpecularColor(QVector3D(1.0f, 1.0f, 1.0f));
 
-    m_Box->add(new ElementObject3D(vertexes, indexes, mtl));
+    m_Box->add(new Object3DElement(vertexes, indexes, mtl));
 }
 
 SkyBox::~SkyBox()

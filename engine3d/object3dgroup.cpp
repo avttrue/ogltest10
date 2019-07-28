@@ -1,17 +1,17 @@
-#include "groupobjects.h"
+#include "object3dgroup.h"
 
-GroupObjects::GroupObjects(const QString &name)
+Object3DGroup::Object3DGroup(const QString &name)
 {
     m_Name = name;
     m_Scale = 1.0f;
 }
 
-void GroupObjects::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
+void Object3DGroup::draw(QOpenGLShaderProgram *program, QOpenGLFunctions *functions)
 {
     for(auto o: m_Objects) o->draw(program, functions);
 }
 
-void GroupObjects::rotate(const QQuaternion &r)
+void Object3DGroup::rotate(const QQuaternion &r)
 {
     m_Rotate = r * m_Rotate;
 
@@ -25,7 +25,7 @@ void GroupObjects::rotate(const QQuaternion &r)
     for(auto o: m_Objects) o->setGlobalTransform(localmatrix);
 }
 
-void GroupObjects::translate(const QVector3D &t)
+void Object3DGroup::translate(const QVector3D &t)
 {
     m_Translate += t;
 
@@ -39,7 +39,7 @@ void GroupObjects::translate(const QVector3D &t)
     for(auto o: m_Objects) o->setGlobalTransform(localmatrix);
 }
 
-void GroupObjects::scale(const float &s)
+void Object3DGroup::scale(const float &s)
 {
     m_Scale *= s;
 
@@ -53,7 +53,7 @@ void GroupObjects::scale(const float &s)
     for(auto o: m_Objects) o->setGlobalTransform(localmatrix);
 }
 
-void GroupObjects::setGlobalTransform(const QMatrix4x4 &gt)
+void Object3DGroup::setGlobalTransform(const QMatrix4x4 &gt)
 {
     m_GlobalTransform = gt;
 
@@ -67,7 +67,7 @@ void GroupObjects::setGlobalTransform(const QMatrix4x4 &gt)
     for(auto o: m_Objects) o->setGlobalTransform(localmatrix);
 }
 
-void GroupObjects::add(Transformational *obj)
+void Object3DGroup::add(Transformational *obj)
 {
     m_Objects.append(obj);
 
@@ -82,7 +82,7 @@ void GroupObjects::add(Transformational *obj)
     qDebug() << "Objects in group" << m_Name << ":" << m_Objects.count();
 }
 
-bool GroupObjects::del(Transformational *obj)
+bool Object3DGroup::del(Transformational *obj)
 {
     bool result = m_Objects.removeAll(obj) > 0 ? true : false;
 
@@ -90,18 +90,18 @@ bool GroupObjects::del(Transformational *obj)
     return result;
 }
 
-void GroupObjects::del(const int &ind)
+void Object3DGroup::del(const int &ind)
 {
     m_Objects.remove(ind);
     qDebug() << "Objects in group" << m_Name << ":" << m_Objects.count();
 }
 
-QString GroupObjects::Name()
+QString Object3DGroup::Name()
 {
     return m_Name;
 }
 
-void GroupObjects::setName(const QString &n)
+void Object3DGroup::setName(const QString &n)
 {
     m_Name = n;
 }

@@ -1,17 +1,17 @@
-#ifndef GROUPOBJECTS_H
-#define GROUPOBJECTS_H
+#ifndef OBJECT3DGROUP_H
+#define OBJECT3DGROUP_H
 
-#include "transformational.h"
+#include "engine3d/transformational.h"
 
 #include <QVector>
 #include <QQuaternion>
 #include <QVector3D>
 #include <QMatrix4x4>
 
-class GroupObjects : public Transformational
+class Object3DGroup : public Transformational
 {
 public:
-    GroupObjects(const QString &name);
+    Object3DGroup(const QString &name);
     void draw(QOpenGLShaderProgram* program, QOpenGLFunctions* functions);
     void rotate(const QQuaternion &r);
     void translate(const QVector3D &t);
@@ -32,4 +32,4 @@ private:
     float m_Scale;
 };
 
-#endif // GROUPOBJECTS_H
+#endif // OBJECT3DGROUP_H
