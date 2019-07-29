@@ -46,7 +46,7 @@ void OGLWidget::initializeGL()
         {
             for(float z = -step; z <= step; z += step)
             {
-                initParallelogram(1.0f, 1.0f, 1.0f, ":/textures/cube1.png", ":/textures/cube1_n.png");
+                initParallelogram(1.0f, 1.0f, 1.0f, new QImage(":/textures/cube1.png"), new QImage(":/textures/cube1_n.png"));
                 m_Objects.last()->translate(QVector3D(x, y, z));
                 m_Groups.last()->add(m_Objects.last());
             }
@@ -61,7 +61,7 @@ void OGLWidget::initializeGL()
         {
             for(float z = -step; z <= step; z += step)
             {
-                initParallelogram(1.0f, 1.0f, 1.0f, ":/textures/cube2.png", ":/textures/cube2_n.png");
+                initParallelogram(1.0f, 1.0f, 1.0f, new QImage(":/textures/cube2.png"), new QImage(":/textures/cube2_n.png"));
                 m_Objects.last()->translate(QVector3D(x, y, z));
                 m_Groups.last()->add(m_Objects.last());
             }
@@ -76,7 +76,7 @@ void OGLWidget::initializeGL()
         {
             for(float z = -step; z <= step; z += step)
             {
-                initParallelogram(1.0f, 1.0f, 1.0f, ":/textures/cube3.png", ":/textures/cube3_n.png");
+                initParallelogram(1.0f, 1.0f, 1.0f, new QImage(":/textures/cube3.png"), new QImage(":/textures/cube3_n.png"));
                 m_Objects.last()->translate(QVector3D(x, y, z));
                 m_Groups.last()->add(m_Objects.last());
             }
@@ -302,7 +302,8 @@ void OGLWidget::initShaders()
     if(! m_ProgramSkyBox.link()) close();
 }
 
-void OGLWidget::initParallelogram(float width, float height, float depth, const QString &texturepath, const QString &normalpath)
+void OGLWidget::initParallelogram(float width, float height, float depth,
+                                  QImage *texturemap, QImage *normalmap)
 {
     float width_div_2 = width / 2.0f;
     float height_div_2 = height / 2.0f;
@@ -355,8 +356,8 @@ void OGLWidget::initParallelogram(float width, float height, float depth, const 
     for(GLuint i = 0; i < 36; ++i) indexes.append(i);
 
     Material* mtl = new Material;
-    mtl->setDiffuseMap(texturepath);
-    mtl->setNormalMap(normalpath);
+    if (texturemap) mtl->setDiffuseMap(*texturemap);
+    if (normalmap) mtl->setNormalMap(*normalmap);
     mtl->setShines(96.0f);
     mtl->setDiffuseColor(QVector3D(1.0f, 1.0f, 1.0f));
     mtl->setAmbienceColor(QVector3D(1.0f, 1.0f, 1.0f));

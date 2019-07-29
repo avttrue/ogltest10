@@ -33,7 +33,8 @@ protected:
     void timerEvent(QTimerEvent* event);
 
     void initShaders();
-    void initParallelogram(float width, float height, float depth, const QString &texturepath, const QString &normalpath);
+    void initParallelogram(float width, float height, float depth,
+                           QImage* texturemap = nullptr, QImage* normalmap = nullptr);
 
 private:
     QMatrix4x4 m_ProjectionMatrix;
