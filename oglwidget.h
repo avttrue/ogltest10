@@ -33,7 +33,7 @@ protected:
     void timerEvent(QTimerEvent* event);
 
     void initShaders();
-    void initCube(float width, const QString &imgpath);
+    void initParallelogram(float width, float height, float depth, const QString &texturepath, const QString &normalpath);
 
 private:
     QMatrix4x4 m_ProjectionMatrix;
