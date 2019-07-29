@@ -14,69 +14,45 @@ SkyBox::SkyBox(float width,
     m_Box = new Object3D;
 
     QVector<VertexData> vertexes;
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2), QVector2D(1.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2), QVector2D(1.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2), QVector2D(0.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2), QVector2D(0.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
     fillFace(vertexes, img_forward);
 
     vertexes.clear();
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2), QVector2D(1.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2), QVector2D(1.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2), QVector2D(0.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2), QVector2D(0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
     fillFace(vertexes, img_top);
 
     vertexes.clear();
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2), QVector2D(1.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2), QVector2D(1.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2), QVector2D(0.0f, 1.0f), QVector3D(0.0f, 1.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2), QVector2D(0.0f, 0.0f), QVector3D(0.0f, 1.0f, 0.0f)));
     fillFace(vertexes, img_bottom);
 
     vertexes.clear();
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2), QVector2D(0.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, -width_div_2), QVector2D(1.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2), QVector2D(0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, -width_div_2), QVector2D(1.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
     fillFace(vertexes, img_left);
 
     vertexes.clear();
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2), QVector2D(1.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2), QVector2D(1.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, -width_div_2), QVector2D(0.0f, 1.0f), QVector3D(1.0f, 0.0f, 0.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, -width_div_2), QVector2D(0.0f, 0.0f), QVector3D(1.0f, 0.0f, 0.0f)));
     fillFace(vertexes, img_right);
 
     vertexes.clear();
-    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2),
-                               QVector2D(1.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2),
-                               QVector2D(1.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2),
-                               QVector2D(0.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
-    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2),
-                               QVector2D(0.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, width_div_2, width_div_2), QVector2D(1.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(-width_div_2, -width_div_2, width_div_2), QVector2D(1.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, width_div_2, width_div_2), QVector2D(0.0f, 1.0f), QVector3D(0.0f, 0.0f, 1.0f)));
+    vertexes.append(VertexData(QVector3D(width_div_2, -width_div_2, width_div_2), QVector2D(0.0f, 0.0f), QVector3D(0.0f, 0.0f, 1.0f)));
     fillFace(vertexes, img_back);
 }
 

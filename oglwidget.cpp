@@ -363,9 +363,9 @@ void OGLWidget::initParallelogram(float width, float height, float depth,
     mtl->setAmbienceColor(QVector3D(1.0f, 1.0f, 1.0f));
     mtl->setSpecularColor(QVector3D(1.0f, 1.0f, 1.0f));
 
-    Object3D* eo3d = new Object3D;
-    eo3d->calculateTBN(vertexes);
-    eo3d->add(new Object3DElement(vertexes, indexes, mtl));
-    m_Objects.append(eo3d);
+    Object3D* o3d = new Object3D;
+    o3d->calculateTBN(vertexes);
+    o3d->add(new Object3DElement(vertexes, indexes, mtl));
+    m_Objects.append(o3d);
 }
 
